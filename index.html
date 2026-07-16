@@ -9,7 +9,7 @@
            ส่วนตกแต่งหน้าตาเว็บ (CSS)
            ========================================= */
         body {
-            background-color: #0d1117; /* พื้นหลังสีเข้ม */
+            background-color: #0d1117;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -30,7 +30,7 @@
 
         h2 {
             text-align: center;
-            color: #00ffff; /* สีฟ้านีออน */
+            color: #00ffff;
             margin-bottom: 5px;
             letter-spacing: 2px;
         }
@@ -50,12 +50,14 @@
             padding: 15px 20px;
             margin-bottom: 15px;
             border-radius: 8px;
-            border-left: 4px solid #00ffff;
         }
 
         .channel-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         /* ดีไซน์สวิตช์ Toggle */
@@ -103,52 +105,95 @@
         input:checked + .slider:before {
             transform: translateX(26px);
         }
+
+        /* =========================================
+           ส่วนตกแต่งข้อมูลผู้พัฒนาระบบ (เพิ่มใหม่)
+           ========================================= */
+        .developer-info {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px dashed #30363d;
+        }
+
+        .developer-info h4 {
+            color: #00ffff;
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .developer-info p {
+            color: #8b949e;
+            margin: 4px 0;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
 
+    <!-- =========================================
+         ส่วนโครงสร้างหน้าเว็บ (HTML)
+         ========================================= -->
     <div class="dashboard">
         <h2>SMART HOME</h2>
         <p class="subtitle">ESP8266 IoT Control Panel</p>
 
+        <!-- ช่องที่ 1 -->
         <div class="channel-row">
-            <span class="channel-name">⚡ ช่องที่ 1 (CH1)</span>
+            <span class="channel-name">💡 ช่องที่ 1 (D1)</span>
             <label class="switch">
                 <input type="checkbox" id="ch1" onchange="toggleDevice('ch1')">
                 <span class="slider"></span>
             </label>
         </div>
 
+        <!-- ช่องที่ 2 -->
         <div class="channel-row">
-            <span class="channel-name">⚡ ช่องที่ 2 (CH2)</span>
+            <span class="channel-name">🔌 ช่องที่ 2 (D2)</span>
             <label class="switch">
                 <input type="checkbox" id="ch2" onchange="toggleDevice('ch2')">
                 <span class="slider"></span>
             </label>
         </div>
 
+        <!-- ช่องที่ 3 -->
         <div class="channel-row">
-            <span class="channel-name">⚡ ช่องที่ 3 (CH3)</span>
+            <span class="channel-name">📺 ช่องที่ 3 (D5)</span>
             <label class="switch">
                 <input type="checkbox" id="ch3" onchange="toggleDevice('ch3')">
                 <span class="slider"></span>
             </label>
         </div>
 
+        <!-- ช่องที่ 4 -->
         <div class="channel-row">
-            <span class="channel-name">⚡ ช่องที่ 4 (CH4)</span>
+            <span class="channel-name">❄️ ช่องที่ 4 (D6)</span>
             <label class="switch">
                 <input type="checkbox" id="ch4" onchange="toggleDevice('ch4')">
                 <span class="slider"></span>
             </label>
         </div>
+
+        <!-- =========================================
+             ข้อมูลผู้พัฒนาระบบ (เพิ่มใหม่)
+             ========================================= -->
+        <div class="developer-info">
+            <h4>ผู้พัฒนาระบบ</h4>
+            <p>นาย ชยานันท์ สายแวว</p>
+            <p>แผนกอิเล็กทรอนิกส์</p>
+            <p>วิทยาลัยสารพัดช่างศรีสะเกษ</p>
+        </div>
     </div>
 
+    <!-- =========================================
+         ส่วนการทำงานและเชื่อมต่อ Firebase (JavaScript)
+         ========================================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // 🛑 สำคัญมาก: นำ Config จากโปรเจกต์ Firebase ของคุณมาใส่ตรงนี้
+        // 🛑 สำคัญมาก: อย่าลืมนำ Config จากโปรเจกต์ Firebase ของคุณมาใส่ตรงนี้เหมือนเดิมนะครับ
         const firebaseConfig = {
             apiKey: "ใส่_API_KEY_ของคุณที่นี่",
             authDomain: "โปรเจกต์ของคุณ.firebaseapp.com",
@@ -159,38 +204,28 @@
             appId: "รหัสแอปของคุณ"
         };
 
-        // เริ่มต้นการทำงานของ Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // ฟังก์ชันส่งค่าไปยัง Firebase เมื่อผู้ใช้กดสวิตช์
         window.toggleDevice = function(channel) {
             const isChecked = document.getElementById(channel).checked;
-            const state = isChecked ? 1 : 0; // เปิด = 1, ปิด = 0
+            const state = isChecked ? 1 : 0; 
             
-            // อัปเดตข้อมูลไปยัง Realtime Database ใน path: /devices/{channel}
             set(ref(db, 'devices/' + channel), state)
-                .then(() => {
-                    console.log(channel + ' อัปเดตสถานะเป็น: ' + state);
-                })
-                .catch((error) => {
-                    console.error("เกิดข้อผิดพลาด: ", error);
-                });
+                .then(() => console.log(channel + ' อัปเดตสถานะเป็น: ' + state))
+                .catch((error) => console.error("เกิดข้อผิดพลาด: ", error));
         };
 
-        // ฟังก์ชันรับค่าจาก Firebase เพื่อให้สวิตช์อัปเดตตามสถานะจริงเสมอ (Real-time sync)
         function listenToDevice(channel) {
             const deviceRef = ref(db, 'devices/' + channel);
             onValue(deviceRef, (snapshot) => {
                 const data = snapshot.val();
                 if (data !== null) {
-                    // เปลี่ยนสถานะสวิตช์บนหน้าเว็บตามฐานข้อมูล (1 = checked, 0 = unchecked)
                     document.getElementById(channel).checked = (data === 1);
                 }
             });
         }
 
-        // เริ่มดึงข้อมูลทั้ง 4 ช่องทันทีที่เปิดเว็บ
         listenToDevice('ch1');
         listenToDevice('ch2');
         listenToDevice('ch3');
