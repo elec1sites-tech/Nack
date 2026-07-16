@@ -107,7 +107,7 @@
         }
 
         /* =========================================
-           ส่วนตกแต่งข้อมูลผู้พัฒนาระบบ (เพิ่มใหม่)
+           ส่วนตกแต่งข้อมูลผู้พัฒนาระบบ
            ========================================= */
         .developer-info {
             text-align: center;
@@ -132,14 +132,10 @@
 </head>
 <body>
 
-    <!-- =========================================
-         ส่วนโครงสร้างหน้าเว็บ (HTML)
-         ========================================= -->
     <div class="dashboard">
         <h2>SMART HOME</h2>
         <p class="subtitle">ESP8266 IoT Control Panel</p>
 
-        <!-- ช่องที่ 1 -->
         <div class="channel-row">
             <span class="channel-name">💡 ช่องที่ 1 (D1)</span>
             <label class="switch">
@@ -148,7 +144,6 @@
             </label>
         </div>
 
-        <!-- ช่องที่ 2 -->
         <div class="channel-row">
             <span class="channel-name">🔌 ช่องที่ 2 (D2)</span>
             <label class="switch">
@@ -157,7 +152,6 @@
             </label>
         </div>
 
-        <!-- ช่องที่ 3 -->
         <div class="channel-row">
             <span class="channel-name">📺 ช่องที่ 3 (D5)</span>
             <label class="switch">
@@ -166,7 +160,6 @@
             </label>
         </div>
 
-        <!-- ช่องที่ 4 -->
         <div class="channel-row">
             <span class="channel-name">❄️ ช่องที่ 4 (D6)</span>
             <label class="switch">
@@ -175,9 +168,6 @@
             </label>
         </div>
 
-        <!-- =========================================
-             ข้อมูลผู้พัฒนาระบบ (เพิ่มใหม่)
-             ========================================= -->
         <div class="developer-info">
             <h4>ผู้พัฒนาระบบ</h4>
             <p>นาย ชยานันท์ สายแวว</p>
@@ -186,14 +176,11 @@
         </div>
     </div>
 
-    <!-- =========================================
-         ส่วนการทำงานและเชื่อมต่อ Firebase (JavaScript)
-         ========================================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // 🛑 สำคัญมาก: อย่าลืมนำ Config จากโปรเจกต์ Firebase ของคุณมาใส่ตรงนี้เหมือนเดิมนะครับ
+        // 🛑 สำคัญมาก: ใส่ Config ของคุณตรงนี้นะครับ
         const firebaseConfig = {
             apiKey: "ใส่_API_KEY_ของคุณที่นี่",
             authDomain: "โปรเจกต์ของคุณ.firebaseapp.com",
@@ -207,6 +194,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // ฟังก์ชันสั่งการเปิด-ปิด
         window.toggleDevice = function(channel) {
             const isChecked = document.getElementById(channel).checked;
             const state = isChecked ? 1 : 0; 
@@ -216,6 +204,7 @@
                 .catch((error) => console.error("เกิดข้อผิดพลาด: ", error));
         };
 
+        // ฟังก์ชันดึงสถานะล่าสุด
         function listenToDevice(channel) {
             const deviceRef = ref(db, 'devices/' + channel);
             onValue(deviceRef, (snapshot) => {
