@@ -9,8 +9,8 @@
            ส่วนตกแต่งหน้าตาเว็บ (CSS)
            ========================================= */
         body {
-            background-color: #0d1117;
-            color: #ffffff;
+            background-color: #0d1117; /* พื้นหลังสีดำเข้ม */
+            color: #ffffff; /* ตัวหนังสือสีขาว */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
@@ -20,17 +20,17 @@
         }
 
         .dashboard {
-            background-color: #161b22;
+            background-color: #161b22; /* สีพื้นหลังกล่องควบคุม */
             border: 1px solid #30363d;
             border-radius: 12px;
             padding: 30px;
             width: 350px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.05); /* เงาสีฟ้าบางๆ */
         }
 
         h2 {
             text-align: center;
-            color: #00ffff;
+            color: #00ffff; /* สีฟ้านีออน */
             margin-bottom: 5px;
             letter-spacing: 2px;
         }
@@ -57,7 +57,7 @@
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 10px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
         }
 
         /* ดีไซน์สวิตช์ Toggle */
@@ -81,7 +81,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #484f58;
+            background-color: #484f58; /* สีสวิตช์ตอนปิด */
             transition: .4s;
             border-radius: 34px;
         }
@@ -99,7 +99,7 @@
         }
 
         input:checked + .slider {
-            background-color: #00ffff;
+            background-color: #00ffff; /* สีสวิตช์ตอนเปิด (ฟ้านีออน) */
         }
 
         input:checked + .slider:before {
@@ -113,7 +113,7 @@
             text-align: center;
             margin-top: 25px;
             padding-top: 15px;
-            border-top: 1px dashed #30363d;
+            border-top: 1px dashed #30363d; /* เส้นประคั่น */
         }
 
         .developer-info h4 {
@@ -124,7 +124,7 @@
         }
 
         .developer-info p {
-            color: #8b949e;
+            color: #8b949e; /* สีข้อความสีเทา */
             margin: 4px 0;
             font-size: 12px;
         }
@@ -180,7 +180,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // 🛑 สำคัญมาก: ใส่ Config ของคุณตรงนี้นะครับ
+        // 🛑 อย่าลืมนำข้อมูล Config จากโปรเจกต์ Firebase ของคุณมาใส่ตรงนี้นะครับ
         const firebaseConfig = {
             apiKey: "ใส่_API_KEY_ของคุณที่นี่",
             authDomain: "โปรเจกต์ของคุณ.firebaseapp.com",
@@ -191,34 +191,31 @@
             appId: "รหัสแอปของคุณ"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getDatabase(app);
 
-        // ฟังก์ชันสั่งการเปิด-ปิด
-        window.toggleDevice = function(channel) {
-            const isChecked = document.getElementById(channel).checked;
-            const state = isChecked ? 1 : 0; 
-            
-            set(ref(db, 'devices/' + channel), state)
-                .then(() => console.log(channel + ' อัปเดตสถานะเป็น: ' + state))
-                .catch((error) => console.error("เกิดข้อผิดพลาด: ", error));
-        };
+            window.toggleDevice = function(channel) {
+                const isChecked = document.getElementById(channel).checked;
+                const state = isChecked ? 1 : 0; 
+                set(ref(db, 'devices/' + channel), state);
+            };
 
-        // ฟังก์ชันดึงสถานะล่าสุด
-        function listenToDevice(channel) {
-            const deviceRef = ref(db, 'devices/' + channel);
-            onValue(deviceRef, (snapshot) => {
-                const data = snapshot.val();
-                if (data !== null) {
-                    document.getElementById(channel).checked = (data === 1);
-                }
-            });
+            function listenToDevice(channel) {
+                const deviceRef = ref(db, 'devices/' + channel);
+                onValue(deviceRef, (snapshot) => {
+                    const data = snapshot.val();
+                    if (data !== null) document.getElementById(channel).checked = (data === 1);
+                });
+            }
+
+            listenToDevice('ch1');
+            listenToDevice('ch2');
+            listenToDevice('ch3');
+            listenToDevice('ch4');
+        } catch (e) {
+            console.log("Firebase ยังไม่ได้ตั้งค่าConfig: ", e.message);
         }
-
-        listenToDevice('ch1');
-        listenToDevice('ch2');
-        listenToDevice('ch3');
-        listenToDevice('ch4');
     </script>
 
 </body>
