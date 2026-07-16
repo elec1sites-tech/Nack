@@ -60,7 +60,9 @@
             gap: 10px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
         }
 
-        /* ดีไซน์สวิตช์ Toggle */
+        /* =========================================
+           ดีไซน์สวิตช์ Toggle
+           ========================================= */
         .switch {
             position: relative;
             display: inline-block;
@@ -170,27 +172,30 @@
 
         <div class="developer-info">
             <h4>ผู้พัฒนาระบบ</h4>
-            <p>นาย ชยานันท์ สายแวว</p>
+            <p>ครูวิทยากร วรรณา</p>
             <p>แผนกอิเล็กทรอนิกส์</p>
             <p>วิทยาลัยสารพัดช่างศรีสะเกษ</p>
         </div>
     </div>
 
     <script type="module">
+        // โค้ดส่วนนี้เตรียมไว้สำหรับการเชื่อมต่อ Firebase 
+        // หากต้องการให้ใช้งานได้จริง ต้องนำ Config จาก Firebase ของคุณมาใส่ตรงนี้
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // 🛑 อย่าลืมนำข้อมูล Config จากโปรเจกต์ Firebase ของคุณมาใส่ตรงนี้นะครับ
+        // 🛑 ใส่ Config ของคุณตรงนี้นะครับ
         const firebaseConfig = {
-            apiKey: "ใส่_API_KEY_ของคุณที่นี่",
-            authDomain: "โปรเจกต์ของคุณ.firebaseapp.com",
-            databaseURL: "https://โปรเจกต์ของคุณ-default-rtdb.firebaseio.com",
-            projectId: "รหัสโปรเจกต์ของคุณ",
-            storageBucket: "โปรเจกต์ของคุณ.appspot.com",
-            messagingSenderId: "รหัสผู้ส่งของคุณ",
-            appId: "รหัสแอปของคุณ"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
+        // ถ้ายังไม่ใส่ Config ฟังก์ชันด้านล่างจะ error ใน Console แต่หน้า UI จะยังแสดงผลได้ปกติครับ
         try {
             const app = initializeApp(firebaseConfig);
             const db = getDatabase(app);
@@ -214,7 +219,7 @@
             listenToDevice('ch3');
             listenToDevice('ch4');
         } catch (e) {
-            console.log("Firebase ยังไม่ได้ตั้งค่าConfig: ", e.message);
+            console.log("Firebase ยังไม่ได้ตั้งค่า: ", e.message);
         }
     </script>
 
